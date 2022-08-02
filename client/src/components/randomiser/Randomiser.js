@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { random } from '../../redux/randomiser/randomiserSlice'
+import {  increment, decrement, random } from '../../redux/randomiser/randomiserSlice'
 
 export function Randomiser(props) {
   const number = useSelector(state => state.randomiser.value)
@@ -13,8 +13,11 @@ export function Randomiser(props) {
       </div>
       <div> 8D </div>
       <div>
+        <button onClick={() => dispatch(increment())} >increment</button>
         <button onClick={() => dispatch(random())} >Get magic number</button>
+        <button onClick={() => dispatch(decrement())} >decrement</button>
         <button onClick={() => document.location.reload()} >Refresh</button>
+
       </div>
     </div>
   )

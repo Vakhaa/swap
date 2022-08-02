@@ -7,7 +7,12 @@ export const randomiserSlice = createSlice({
     value: 0
   },
   reducers: {
-    // normal reducer with simple logic
+    increment: state => {
+      state.value += 1
+    },
+    decrement: state => {
+      state.value -= 1
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(random.fulfilled, (state, action) => {
@@ -17,6 +22,8 @@ export const randomiserSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
+export const { increment, decrement } = randomiserSlice.actions
+
 
 export default randomiserSlice.reducer
 
