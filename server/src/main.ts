@@ -1,20 +1,30 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
-
-var corsOptions = {
-  origin: 'http://localhost:3000',
-  methods: ['POST', 'PUT', 'DELETE', 'GET'],
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  app.enableCors(corsOptions);
+  const configService = app.get(ConfigService);
+  
+  //CORS
+  const cors = configService.get<CorsOption>('cors');
+  app.enableCors(cors);
+  
+  //UTILS
   app.use(helmet());
-  await app.listen(5000);
+  //PORT
+  const PORT = configService.get('port');
+  await app.listen(PORT);
+  
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
 bootstrap();
+
+interface CorsOption {
+  origin: string,
+  methods: string[],
+  optionsSuccessStatus: number
+}

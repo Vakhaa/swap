@@ -3,12 +3,22 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProfileModule } from './profile/profile.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from 'config/configuration';
 
 @Module({
   imports: [
     ProfileModule, 
-    MongooseModule.forRoot('mongodb+srv://swapland:NWC2QXhkltx0epdW@cluster0.urt8qts.mongodb.net/swap?retryWrites=true&w=majority')],
+    ConfigModule.forRoot({load: [configuration]}),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('database.mongo.uri'),
+      }),
+      inject: [ConfigService],
+    })],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule {}
